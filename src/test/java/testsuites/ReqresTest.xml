@@ -1,0 +1,40 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+
+<suite name="Suite1"  >
+    <test name="Post Request Test">
+        <classes>
+            <class name="test.Reqres.TestPostRequest">
+                <methods>
+                    <include name="testPostRequest"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+    <test name="Put Request Test">
+        <classes>
+            <class name="test.Reqres.TestPutRequest">
+                <methods>
+                    <include name="testPutRequest"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+    <test name="Get Request Test">
+        <classes>
+            <class name="test.Reqres.TestGetRequest">
+                <methods>
+                    <include name="testGetRequest"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+    <test name="Delete Request Test">
+        <classes>
+            <class name="test.Reqres.TestDeleteRequest">
+                <methods>
+                    <include name="testDeleteRequest"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>
