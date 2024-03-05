@@ -3,7 +3,7 @@
 <suite name="Suite1" verbose="1" >
     <test name="Regression1">
         <classes>
-            <class name="test.BookingE2ETest">
+            <class name="test.booking.BookingE2ETest">
                 <methods>
                     <include name="createNewBooking"/>
                     <include name="getBooking"/>

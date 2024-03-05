@@ -1,4 +1,4 @@
-package test;
+package test.booking;
 
 import base.baseBookingSetup;
 import data.Booking.BookingData;

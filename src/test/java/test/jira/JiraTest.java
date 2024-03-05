@@ -1,4 +1,4 @@
-package jira;
+package test.jira;
 
 import utils.ProjectInfo;
 import utils.RequestCapability;
