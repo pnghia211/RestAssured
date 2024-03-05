@@ -22,25 +22,8 @@ public class ProjectInfo implements RequestCapability {
         getProjectInfo();
     }
 
-    public String getIssueTypeId(String issueTypeName) {
-        getIssueTypes();
-        String issueTypeId = null;
-
-        for (Map<String, String> issueType : issueTypes) {
-            if (issueType.get("name").equalsIgnoreCase(issueTypeName)) {
-                System.out.println(issueType.get("id"));
-                break;
-            }
-        }
-
-        if (issueTypeId == null) {
-            throw new RuntimeException("[ERR] issue type id cannot be null");
-        }
-        return issueTypeId;
-    }
-
     private void getProjectInfo() {
-        String path = "/rest/api/3/project" + projectKey;
+        String path = "/rest/api/3/project/" + projectKey;
 
         String email = System.getenv("email");
         String apiToken = System.getenv("token");
@@ -57,7 +40,33 @@ public class ProjectInfo implements RequestCapability {
         projectInfo = JsonPath.from(response.asString()).get();
     }
 
+    public String getIssueTypeId(String issueTypeName) {
+        getIssueTypes();
+        String issueTypeId = null;
+
+        for (Map<String, String> issueType : issueTypes) {
+            if (issueType.get("name").equalsIgnoreCase(issueTypeName)) {
+                issueTypeId = issueType.get("id");
+                break;
+            }
+        }
+
+        if (issueTypeId == null) {
+            throw new RuntimeException("[ERR] cannot find the issue id for " + "\"" + issueTypeName + "\"");
+        }
+        return issueTypeId;
+    }
+
     private void getIssueTypes() {
         issueTypes = projectInfo.get("issueTypes");
+    }
+
+    @Override
+    public String toString() {
+        return "ProjectInfo{" +
+                "baseUri='" + baseUri + '\'' +
+                ", projectKey='" + projectKey + '\'' +
+                ", issueTypes=" + issueTypes +
+                '}';
     }
 }
