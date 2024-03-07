@@ -1,9 +1,9 @@
 package data.Jira;
 
-public class IssueInfo {
+public class IssueFields {
     private Fields fields;
 
-    public IssueInfo(Fields fields) {
+    public IssueFields(Fields fields) {
         this.fields = fields;
     }
 

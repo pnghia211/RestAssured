@@ -1,8 +1,8 @@
 package test.jira;
 
 import builder.IssueContentBuilder;
-import builder.JSONBuilder;
-import data.Jira.IssueInfo;
+import builder.IssueTransitionBuilder;
+import data.Jira.IssueFields;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
@@ -11,7 +11,9 @@ import utils.ProjectInfo;
 import utils.RequestCapability;
 import utils.AuthTokenHandler;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 import static io.restassured.RestAssured.given;
 
@@ -40,34 +42,54 @@ public class CreateIssue implements RequestCapability {
         int length = 20;
         boolean hasText = true;
         boolean hasNum = true;
-        String randomSummary = RandomStringUtils.random(length,hasText,hasNum);
+        String randomSummary = RandomStringUtils.random(length, hasText, hasNum);
 
         IssueContentBuilder issueContentBuilder = new IssueContentBuilder();
         String projectInfoStr = issueContentBuilder.build(randomSummary, projectKey, taskTypeId);
 
-        // Send request
+        // Send post request
         Response response = request.body(projectInfoStr).post(path);
         response.prettyPrint();
 
         // Get request
         Map<String, String> responseBody = JsonPath.from(response.asString()).get();
-        String getIssuePath = "/rest/api/3/issue/" + responseBody.get("key");
+        final String CREATED_ISSUE_KEY = responseBody.get("key");
 
-        response = request.get(getIssuePath);
-
-        IssueInfo issueInfo = issueContentBuilder.getIssueInfo();
-        String expectedSummary = issueInfo.getFields().getSummary();
+        IssueFields issueFields = issueContentBuilder.getIssueInfo();
+        String expectedSummary = issueFields.getFields().getSummary();
         String expectedStatus = "To Do";
 
+        //Read created Jira task
+        Function<String, Map<String, String>> getIssueInfo = issueKey -> {
+            String getIssuePath = "/rest/api/3/issue/" + issueKey;
+            Response response_ = request.get(getIssuePath);
 
-        JsonPath jsonPath = new JsonPath(response.asString());
-        String actualSummary = jsonPath.getString("fields.summary");
-        String actualStatus = jsonPath.getString("fields.status.statusCategory.name");
+            JsonPath jsonPath = JsonPath.from(response_.asString());
+            String actualSummary = jsonPath.getString("fields.summary");
+            String actualStatus = jsonPath.getString("fields.status.statusCategory.name");
+
+            Map<String, String> issueInfo = new HashMap<>();
+            issueInfo.put("summary", actualSummary);
+            issueInfo.put("status", actualStatus);
+            return issueInfo;
+        };
+
+        Map<String, String> issueInfo = getIssueInfo.apply(CREATED_ISSUE_KEY);
 
         System.out.println(expectedSummary);
-        System.out.println(actualSummary);
+        System.out.println(issueInfo.get("summary"));
 
         System.out.println(expectedStatus);
-        System.out.println(actualStatus);
+        System.out.println(issueInfo.get("status"));
+
+        // Update created jira task
+        String issueTransitionPath = "/rest/api/3/issue/" + CREATED_ISSUE_KEY + "/transitions";
+        String DONE_STATUS_ID = "41";
+        IssueTransitionBuilder issueTransitionBuilder = new IssueTransitionBuilder();
+        String transitionBody = issueTransitionBuilder.build(DONE_STATUS_ID);
+
+        request.body(transitionBody).post(issueTransitionPath).then().assertThat().statusCode(204);
+        issueInfo = getIssueInfo.apply(CREATED_ISSUE_KEY);
+        System.out.println("Update status :" + issueInfo.get("status"));
     }
 }

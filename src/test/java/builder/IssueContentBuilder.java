@@ -1,21 +1,20 @@
 package builder;
 
-import com.google.gson.Gson;
-import data.Jira.IssueInfo;
+import data.Jira.IssueFields;
 
 public class IssueContentBuilder {
 
-    private IssueInfo issueInfo;
+    private IssueFields issueFields;
 
     public String build(String summary, String projectKey, String issueTypeId) {
-        IssueInfo.IssueType issueType = new IssueInfo.IssueType(issueTypeId);
-        IssueInfo.Project project = new IssueInfo.Project(projectKey);
-        IssueInfo.Fields fields = new IssueInfo.Fields(summary, project, issueType);
-        issueInfo = new IssueInfo(fields);
-        return JSONBuilder.getJSON(issueInfo);
+        IssueFields.IssueType issueType = new IssueFields.IssueType(issueTypeId);
+        IssueFields.Project project = new IssueFields.Project(projectKey);
+        IssueFields.Fields fields = new IssueFields.Fields(summary, project, issueType);
+        issueFields = new IssueFields(fields);
+        return JSONBuilder.getJSON(issueFields);
     }
 
-    public IssueInfo getIssueInfo() {
-        return issueInfo;
+    public IssueFields getIssueInfo() {
+        return issueFields;
     }
 }

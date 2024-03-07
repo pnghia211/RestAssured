@@ -43,7 +43,6 @@ public class ProjectInfo implements RequestCapability {
     public String getIssueTypeId(String issueTypeName) {
         getIssueTypes();
         String issueTypeId = null;
-
         for (Map<String, String> issueType : issueTypes) {
             if (issueType.get("name").equalsIgnoreCase(issueTypeName)) {
                 issueTypeId = issueType.get("id");
