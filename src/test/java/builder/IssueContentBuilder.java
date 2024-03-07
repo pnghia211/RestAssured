@@ -14,7 +14,7 @@ public class IssueContentBuilder {
         return JSONBuilder.getJSON(issueFields);
     }
 
-    public IssueFields getIssueInfo() {
+    public IssueFields getIssueFields() {
         return issueFields;
     }
 }

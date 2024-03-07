@@ -55,7 +55,7 @@ public class CreateIssue implements RequestCapability {
         Map<String, String> responseBody = JsonPath.from(response.asString()).get();
         final String CREATED_ISSUE_KEY = responseBody.get("key");
 
-        IssueFields issueFields = issueContentBuilder.getIssueInfo();
+        IssueFields issueFields = issueContentBuilder.getIssueFields();
         String expectedSummary = issueFields.getFields().getSummary();
         String expectedStatus = "To Do";
 
@@ -75,21 +75,32 @@ public class CreateIssue implements RequestCapability {
         };
 
         Map<String, String> issueInfo = getIssueInfo.apply(CREATED_ISSUE_KEY);
-
         System.out.println(expectedSummary);
         System.out.println(issueInfo.get("summary"));
 
         System.out.println(expectedStatus);
         System.out.println(issueInfo.get("status"));
 
-        // Update created jira task
+        // Update (transition) created jira task
         String issueTransitionPath = "/rest/api/3/issue/" + CREATED_ISSUE_KEY + "/transitions";
         String DONE_STATUS_ID = "41";
         IssueTransitionBuilder issueTransitionBuilder = new IssueTransitionBuilder();
         String transitionBody = issueTransitionBuilder.build(DONE_STATUS_ID);
 
+        // Send update transition request
         request.body(transitionBody).post(issueTransitionPath).then().assertThat().statusCode(204);
         issueInfo = getIssueInfo.apply(CREATED_ISSUE_KEY);
         System.out.println("Update status :" + issueInfo.get("status"));
+
+        // Delete created jira task
+        String issueDeletePath = "/rest/api/3/issue/" + CREATED_ISSUE_KEY;
+        request.delete(issueDeletePath).then().assertThat().statusCode(204);
+
+        // Verify not existing issue
+        String issueGetPath = "/rest/api/3/issue/" + CREATED_ISSUE_KEY;
+        response = request.get(issueGetPath);
+        JsonPath jsonPath = JsonPath.from(response.asString());
+        String errorMessages = jsonPath.get("errorMessages[0]");
+        System.out.println(errorMessages);
     }
 }
