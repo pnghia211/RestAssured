@@ -25,9 +25,7 @@ public class ProjectInfo implements RequestCapability {
     private void getProjectInfo() {
         String path = "/rest/api/3/project/" + projectKey;
 
-        String email = System.getenv("email");
-        String apiToken = System.getenv("token");
-        String cred = email.concat(":").concat(apiToken);
+        String cred = email.concat(":").concat(token);
         byte[] encodeCred = Base64.encodeBase64(cred.getBytes());
         String credString = new String(encodeCred);
 
@@ -60,12 +58,4 @@ public class ProjectInfo implements RequestCapability {
         issueTypes = projectInfo.get("issueTypes");
     }
 
-    @Override
-    public String toString() {
-        return "ProjectInfo{" +
-                "baseUri='" + baseUri + '\'' +
-                ", projectKey='" + projectKey + '\'' +
-                ", issueTypes=" + issueTypes +
-                '}';
-    }
 }

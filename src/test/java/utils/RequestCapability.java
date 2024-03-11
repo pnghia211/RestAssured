@@ -14,7 +14,8 @@ import static io.restassured.RestAssured.given;
 public interface RequestCapability {
     Header defaultHeader = new Header("Content-type", "application/json; charset=UTF-8");
     Header acceptJSONHeader = new Header("Accept", "application/json");
-
+    String token = "ATATT3xFfGF0MLnszRfabmDrF-Bf2Xzczt3MbluTmLTlfjUTu7lxNd-8QorQu5tKFkEaXsryvBFnbNetPM9SDuk2fJ55t69z8kGcgZoXVsnHejA7rPvVqpWs1Dw8Uu_jbTQLPs-euOIQ6aeOrxPJoPkAoXhS1nYkI5Hs0NVybJLndqaNzbd8CXs=6E2114DC";
+    String email = "pnghia211@gmail.com";
     static Header getAuth(String encodeString) {
         if (encodeString == null) {
             throw new IllegalArgumentException("[ERR] encode String cannot be null");
