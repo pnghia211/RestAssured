@@ -23,7 +23,6 @@ public class TestPutRequest extends baseReqresSetup {
     public void testPutRequest(String name, String job, String id) {
         PostData postData = new PostData(name, job);
         given()
-                .contentType(ContentType.JSON)
                 .body(postData)
                 .put("/api/users/" + id)
                 .then()
@@ -42,7 +41,7 @@ public class TestPutRequest extends baseReqresSetup {
     @DataProvider
     public Iterator<Object[]> getPutData() {
         List<Object[]> dataList = new ArrayList<>();
-        dataList.add(new Object[]{"Rahul", "QA", "2"});
+        dataList.add(new Object[]{"Rahul", "QA", "1"});
         dataList.add(new Object[]{"Jane", "Sr.Dev", "10"});
         return dataList.iterator();
     }

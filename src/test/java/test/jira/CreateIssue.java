@@ -30,10 +30,10 @@ public class CreateIssue implements RequestCapability {
 
         // Request Object
         RequestSpecification request = given();
-        request.baseUri(baseUri);
-        request.header(defaultHeader);
-        request.header(acceptJSONHeader);
-        request.header(getAuth.apply(credString));
+        request.baseUri(baseUri)
+                .header(defaultHeader)
+                .header(acceptJSONHeader)
+                .header(getAuth.apply(credString));
 
         // Define body data
         ProjectInfo projectInfo = new ProjectInfo(baseUri, projectKey);

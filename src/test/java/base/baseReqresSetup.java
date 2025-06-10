@@ -8,18 +8,22 @@ import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.BeforeTest;
 
 import static org.hamcrest.Matchers.lessThan;
 
 public class baseReqresSetup {
 
-    @BeforeClass
+    @BeforeSuite
     public void setupReqres() {
         RequestSpecification requestSpecification = new RequestSpecBuilder()
                 .setBaseUri("https://reqres.in")
                 .addHeader("Content-Type", "application/json")
-//                .addFilter(new RequestLoggingFilter())
-//                .addFilter(new ResponseLoggingFilter())
+                .addHeader("x-api-key", "reqres-free-v1")
+                .addFilter(new RequestLoggingFilter())
+                .addFilter(new ResponseLoggingFilter())
                 .build();
 
         ResponseSpecification responseSpecification = new ResponseSpecBuilder()
@@ -28,6 +32,5 @@ public class baseReqresSetup {
 
         RestAssured.requestSpecification = requestSpecification;
         RestAssured.responseSpecification = responseSpecification;
-
     }
 }

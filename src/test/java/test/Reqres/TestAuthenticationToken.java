@@ -3,6 +3,7 @@ package test.Reqres;
 import base.baseReqresSetup;
 import data.Reqres.AuthenticationPOJO;
 import io.restassured.http.ContentType;
+import io.restassured.http.Header;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 

@@ -1,5 +1,5 @@
 package data;
 
 public interface ReqresURL {
-    String URL = "https://reqres.in";
+        String URL = "https://reqres.in";
 }
